@@ -1,18 +1,27 @@
+import { dispatch } from '@rematch/core'
+
 export const pkmns = {
-  state:{
-    pkmns: [],
-    //id, naam, type, img, flavourtext, mogelijke evoluties
+  'state': {
+    'pkmns': [],
   },
 
   reducers: {
-    add: (state, payload) => state + payload,
+    add: (state, payload) =>{
+      state.pkmns = state.pkmns.concat(payload)
+      return state;
+    },
   },
 
   effects:{
-    async loadData(payload, rootState) {
-      const response = await fetch('http://pokeapi.co/api/v2/pokemon-species/?limit=3')
-      const data = await response.json()
-      dispatch.add.update(data)
+    async start(payload, pkmns) {
+      return fetch('http://pokeapi.salestock.net/api/v2/pokemon-species/?limit=3')
+      .then(response => response.json())
+      .then(data => {
+         dispatch.pkmns.add(data.results)
+      })
     }
   }
 };
+
+//https://pokeapi.co/api/v2/pokemon-species/?limit=3
+//https://reactcheatsheet.com/
